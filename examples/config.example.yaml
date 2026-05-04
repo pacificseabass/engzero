@@ -1,0 +1,19 @@
+agent:
+  name: "3ng0"
+  timezone: "America/Los_Angeles"
+
+state:
+  type: "json"
+  path: "~/.local/share/3ng0/state.json"
+
+vaults:
+  - id: "agent"
+    label: "3ng0 Agent Vault"
+    root_path: "~/Obsidian/agent-vault"
+    capabilities:
+      - read
+      - write
+      - append
+
+projects:
+  default_project_id: "agent-runtime"
