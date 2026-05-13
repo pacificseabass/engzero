@@ -1,7 +1,7 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 
-import { StateStoreError } from "../util/errors.js";
+import { formatError, StateStoreError } from "../util/errors.js";
 import type { StateStore } from "./stateStore.js";
 import { type AgentRuntimeState, createEmptyState } from "./stateTypes.js";
 
@@ -20,6 +20,8 @@ export class JsonStateStore implements StateStore {
 
       throw new StateStoreError(
         `Failed to read state store at ${this.path}: ${formatError(error)}`,
+        "state-read-failed",
+        { cause: error },
       );
     }
 
@@ -30,6 +32,8 @@ export class JsonStateStore implements StateStore {
     } catch (error) {
       throw new StateStoreError(
         `State store at ${this.path} contains invalid JSON: ${formatError(error)}`,
+        "state-invalid-json",
+        { cause: error },
       );
     }
 
@@ -50,6 +54,8 @@ export class JsonStateStore implements StateStore {
     } catch (error) {
       throw new StateStoreError(
         `Failed to write state store at ${this.path}: ${formatError(error)}`,
+        "state-write-failed",
+        { cause: error },
       );
     }
   }
@@ -113,8 +119,4 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isNodeError(error: unknown): error is NodeJS.ErrnoException {
   return error instanceof Error && "code" in error;
-}
-
-function formatError(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
 }

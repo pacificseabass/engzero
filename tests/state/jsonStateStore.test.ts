@@ -87,7 +87,13 @@ describe("JsonStateStore", () => {
 
     const store = new JsonStateStore(statePath);
 
-    await expect(store.load()).rejects.toBeInstanceOf(StateStoreError);
+    const error = await store.load().catch((error: unknown) => error);
+
+    expect(error).toBeInstanceOf(StateStoreError);
+    expect(error).toMatchObject({
+      code: "state-invalid-json",
+    });
+    expect((error as StateStoreError).cause).toBeInstanceOf(SyntaxError);
   });
 
   it("rejects unsupported state versions", async () => {

@@ -3,7 +3,7 @@ import { homedir } from "node:os";
 import { isAbsolute, join, resolve } from "node:path";
 import { parse } from "yaml";
 
-import { ConfigError } from "../util/errors.js";
+import { ConfigError, formatError } from "../util/errors.js";
 import type { VaultCapability, VaultConfig } from "../vaults/vaultTypes.js";
 import {
   DEFAULT_CONFIG_ENV_VAR,
@@ -36,8 +36,17 @@ export async function loadConfig(
   try {
     raw = await readFile(configPath, "utf8");
   } catch (error) {
+    if (isNodeError(error) && error.code === "ENOENT") {
+      throw new ConfigError(
+        `Failed to read config at ${configPath}: ${formatError(error)}`,
+        "file-does-not-exist",
+        { cause: error },
+      );
+    }
     throw new ConfigError(
       `Failed to read config at ${configPath}: ${formatError(error)}`,
+      "config-read-failed",
+      { cause: error },
     );
   }
 
@@ -48,6 +57,8 @@ export async function loadConfig(
   } catch (error) {
     throw new ConfigError(
       `Failed to parse config at ${configPath}: ${formatError(error)}`,
+      "config-parse-failed",
+      { cause: error },
     );
   }
 
@@ -100,7 +111,7 @@ function normalizeState(
     type: "json",
     path: resolvePath(
       readOptionalString(raw.state?.path, "state.path") ??
-        getDefaultStatePath(homeDir),
+      getDefaultStatePath(homeDir),
       homeDir,
     ),
   };
@@ -196,7 +207,7 @@ function isVaultCapability(value: string): value is VaultCapability {
 function readRequiredString(value: unknown, field: string): string {
   const result = readOptionalString(value, field);
 
-  if (!result) {
+  if (result === undefined) {
     throw new ConfigError(`${field} is required.`);
   }
 
@@ -228,6 +239,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function formatError(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
+function isNodeError(error: unknown): error is NodeJS.ErrnoException {
+  return error instanceof Error && "code" in error;
 }

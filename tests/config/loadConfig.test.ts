@@ -144,12 +144,19 @@ describe("loadConfig", () => {
     );
   });
 
-  it("wraps unreadable config errors as ConfigError", async () => {
+  it("wraps unreadable config errors as ConfigError with cause", async () => {
     const homeDir = await createTempDir();
 
-    await expect(
-      loadConfig({ path: join(homeDir, "missing.yaml"), homeDir }),
-    ).rejects.toBeInstanceOf(ConfigError);
+    const error = await loadConfig({
+      path: join(homeDir, "missing.yaml"),
+      homeDir,
+    }).catch((error: unknown) => error);
+
+    expect(error).toBeInstanceOf(ConfigError);
+    expect(error).toMatchObject({
+      code: "file-does-not-exist",
+    });
+    expect((error as ConfigError).cause).toBeInstanceOf(Error);
   });
 });
 
