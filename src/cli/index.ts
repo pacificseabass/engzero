@@ -4,6 +4,7 @@ import { Command } from "commander";
 
 import { addVaultSubcommand } from "./commands/vault.js";
 import { addDoctorSubcommand } from "./commands/doctor.js";
+import { addSetupSubcommand } from "./commands/setup.js";
 import { formatError, RuntimeError } from "../util/errors.js";
 
 function handleCliError(error: unknown): void {
@@ -31,11 +32,11 @@ async function runCli(): Promise<void> {
 
   addVaultSubcommand(program);
   addDoctorSubcommand(program);
+  addSetupSubcommand(program);
 
-  program.parseAsync(process.argv);
+  await program.parseAsync(process.argv);
 }
 
 runCli()
   .catch(handleCliError)
-
 
