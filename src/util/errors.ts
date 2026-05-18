@@ -109,3 +109,25 @@ export class PathNotFound extends InvalidPath {
     this.name = "PathNotFound";
   }
 }
+
+export class InvalidProjectId extends RuntimeError {
+  constructor(message: string, code: string = 'invalid-project-id', options?: ErrorOptions) {
+    super(message, code, 'InvalidProjectId', options)
+  }
+}
+
+export class InvalidProjectIdUnicode extends InvalidProjectId {
+  constructor(name: string, options?: ErrorOptions) {
+    super(`${name} is not valid unicode and cannot be used as a "project id"`, 'invalid-project-id-unicode', options);
+  }
+}
+
+export class ProjectAlreadyExistsError extends RuntimeError {
+  constructor(projectId: string) {
+    super(
+      `Project already exists: ${projectId}`,
+      "project-already-exists",
+      "ProjectAlreadyExistsError",
+    );
+  }
+}
