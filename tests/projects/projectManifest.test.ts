@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   createProjectManifest,
   getProjectManifestPath,
+  renderProjectManifestNote,
 } from "../../src/projects/projectManifest.js";
 import { ProjectService } from "../../src/projects/projectService.js";
 import { ProjectNotFoundError } from "../../src/util/errors.js";
@@ -37,9 +38,6 @@ describe("createProjectManifest", () => {
       stateStore,
       vaultRegistry,
       project.projectId,
-      project.riskProfile,
-      project.vaultNamespace,
-      project.memoryNamespace,
     );
 
     expect(result).toEqual({
@@ -52,13 +50,9 @@ describe("createProjectManifest", () => {
         "ProjectManifest.md",
       ),
     });
-
-    const contents = await readFile(result.absolutePath, "utf8");
-    expect(contents).toContain("type: project-manifest");
-    expect(contents).toContain("project_id: agent-runtime");
-    expect(contents).toContain("risk_profile: high");
-    expect(contents).toContain("vault_namespace: agent");
-    expect(contents).toContain("memory_namespace: agent-runtime");
+    await expect(readFile(result.absolutePath, "utf8")).resolves.toBe(
+      renderProjectManifestNote(project),
+    );
   });
 
   it("rejects projects that are not registered in state", async () => {
@@ -66,14 +60,7 @@ describe("createProjectManifest", () => {
     const vaultRegistry = new VaultRegistry([vault]);
 
     await expect(
-      createProjectManifest(
-        new InMemoryStateStore(),
-        vaultRegistry,
-        "missing",
-        "medium",
-        "agent",
-        "missing",
-      ),
+      createProjectManifest(new InMemoryStateStore(), vaultRegistry, "missing"),
     ).rejects.toThrow(ProjectNotFoundError);
   });
 
@@ -81,6 +68,84 @@ describe("createProjectManifest", () => {
     expect(getProjectManifestPath("agent-runtime")).toBe(
       "04-Projects/agent-runtime/ProjectManifest.md",
     );
+  });
+});
+
+describe("renderProjectManifestNote", () => {
+  it("renders frontmatter and placeholder sections for a minimal project", () => {
+    expect(
+      renderProjectManifestNote({
+        projectId: "agent-runtime",
+        name: "agent-runtime",
+        memoryNamespace: "agent-runtime",
+        vaultNamespace: "agent",
+        repos: [],
+        riskProfile: "medium",
+        deploymentTargets: [],
+        toolsAllowed: [],
+      }),
+    ).toBe(
+      [
+        "---",
+        "type: project-manifest",
+        "status: active",
+        "project_id: agent-runtime",
+        "name: agent-runtime",
+        "risk_profile: medium",
+        "vault_namespace: agent",
+        "memory_namespace: agent-runtime",
+        "---",
+        "",
+        "# Project Manifest: agent-runtime",
+        "",
+        "## Repositories",
+        "",
+        "_No repositories registered._",
+        "",
+        "## Deployment Targets",
+        "",
+        "_No deployment targets registered._",
+        "",
+        "## Allowed Tools",
+        "",
+        "_No tools allowed._",
+        "",
+      ].join("\n"),
+    );
+  });
+
+  it("renders repos, deployment targets, and tools as lists", () => {
+    const note = renderProjectManifestNote({
+      projectId: "agent-runtime",
+      name: "Agent Runtime",
+      projectType: "internal-platform",
+      memoryNamespace: "agent-runtime",
+      vaultNamespace: "agent",
+      repos: [
+        {
+          name: "3ng0",
+          path: "~/developer/3ng0",
+          remote: "git@github.com:3ng0/3ng0.git",
+        },
+      ],
+      riskProfile: "high",
+      deploymentTargets: [
+        { name: "local-dev", provider: "local", status: "active" },
+        { name: "future-cloud", provider: "gcp", status: "planned" },
+      ],
+      toolsAllowed: ["obsidian_writer", "git_tool"],
+    });
+
+    expect(note).toContain('name: "Agent Runtime"');
+    expect(note).toContain("project_type: internal-platform");
+    expect(note).toContain("# Project Manifest: Agent Runtime");
+    expect(note).toContain(
+      "- 3ng0 (~/developer/3ng0, git@github.com:3ng0/3ng0.git)",
+    );
+    expect(note).toContain("- local-dev (local, active)");
+    expect(note).toContain("- future-cloud (gcp, planned)");
+    expect(note).toContain("- obsidian_writer");
+    expect(note).toContain("- git_tool");
   });
 });
 
