@@ -52,6 +52,21 @@ export class ProjectNotFoundError extends RuntimeError {
   }
 }
 
+export class InvalidStatusTransitionError extends RuntimeError {
+  constructor(
+    readonly from: string,
+    readonly to: string,
+    options?: ErrorOptions,
+  ) {
+    super(
+      `Invalid change-set status transition: ${from} -> ${to}`,
+      "invalid-status-transition",
+      "InvalidStatusTransitionError",
+      options,
+    );
+  }
+}
+
 export class ChangeSetNotFoundError extends RuntimeError {
   constructor(
     message: string,
