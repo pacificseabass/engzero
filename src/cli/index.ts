@@ -7,6 +7,7 @@ import { addDoctorSubcommand } from "./commands/doctor.js";
 import { addSetupSubcommand } from "./commands/setup.js";
 import { addConfigSubcommand } from "./commands/config.js";
 import { addProjectSubcommand } from "./commands/project.js";
+import { addChangeSetSubcommand } from "./commands/changeSet.js";
 import { formatError, RuntimeError } from "../util/errors.js";
 
 function handleCliError(error: unknown): void {
@@ -37,6 +38,7 @@ async function runCli(): Promise<void> {
   addSetupSubcommand(program);
   addConfigSubcommand(program);
   addProjectSubcommand(program);
+  addChangeSetSubcommand(program);
 
   await program.parseAsync(process.argv);
 }
