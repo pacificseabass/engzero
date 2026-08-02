@@ -1,9 +1,16 @@
 import { type Command } from "commander";
 
 import { loadConfig } from "../../config/loadConfig.js";
+import type { WriteNoteResult } from "../../markdown/markdownWriter.js";
+import { createProjectManifest } from "../../projects/projectManifest.js";
 import { ProjectService } from "../../projects/projectService.js";
-import type { ProjectManifest, RiskProfile } from "../../projects/projectTypes.js";
+import type {
+  InitProjectInput,
+  ProjectManifest,
+  RiskProfile,
+} from "../../projects/projectTypes.js";
 import { JsonStateStore } from "../../state/jsonStateStore.js";
+import type { StateStore } from "../../state/stateStore.js";
 import { ProjectNotFoundError, RuntimeError } from "../../util/errors.js";
 import { VaultRegistry } from "../../vaults/vaultRegistry.js";
 
@@ -39,8 +46,8 @@ export function addProjectSubcommand(program: Command): void {
     .option("--risk <risk>", "Risk profile: low, medium, or high")
     .option("--json", "Print created project as JSON")
     .action(async (projectId: string, options: ProjectInitOptions) => {
-      const service = await createProjectService();
-      const project = await service.init({
+      const { stateStore, vaultRegistry } = await createRuntime();
+      const { project, note } = await runProjectInit(stateStore, vaultRegistry, {
         projectId,
         name: options.name,
         projectType: options.type,
@@ -49,7 +56,7 @@ export function addProjectSubcommand(program: Command): void {
         riskProfile: parseRiskProfile(options.risk),
       });
 
-      console.log(formatProjectInit(project, options));
+      console.log(formatProjectInit(project, options, note));
     });
 
   project
@@ -79,10 +86,36 @@ export function addProjectSubcommand(program: Command): void {
     });
 }
 
-async function createProjectService(): Promise<ProjectService> {
+export async function runProjectInit(
+  stateStore: StateStore,
+  vaultRegistry: VaultRegistry,
+  input: InitProjectInput,
+): Promise<{ project: ProjectManifest; note: WriteNoteResult }> {
+  const service = new ProjectService(stateStore, vaultRegistry);
+  const project = await service.init(input);
+  const note = await createProjectManifest(
+    stateStore,
+    vaultRegistry,
+    project.projectId,
+  );
+
+  return { project, note };
+}
+
+async function createRuntime(): Promise<{
+  stateStore: StateStore;
+  vaultRegistry: VaultRegistry;
+}> {
   const config = await loadConfig();
-  const stateStore = new JsonStateStore(config.state.path);
-  const vaultRegistry = new VaultRegistry(config.vaults);
+
+  return {
+    stateStore: new JsonStateStore(config.state.path),
+    vaultRegistry: new VaultRegistry(config.vaults),
+  };
+}
+
+async function createProjectService(): Promise<ProjectService> {
+  const { stateStore, vaultRegistry } = await createRuntime();
 
   return new ProjectService(stateStore, vaultRegistry);
 }
@@ -129,12 +162,18 @@ export function formatProjectList(
 export function formatProjectInit(
   project: ProjectManifest,
   options: Pick<ProjectInitOptions, "json"> = {},
+  note?: WriteNoteResult,
 ): string {
   if (options.json) {
     return JSON.stringify(project, null, 2);
   }
 
-  return `Created project: ${project.projectId}`;
+  const lines = [`Created project: ${project.projectId}`];
+  if (note !== undefined) {
+    lines.push(`Manifest note: ${note.relativePath} (vault: ${note.vaultId})`);
+  }
+
+  return lines.join("\n");
 }
 
 export function formatProject(
