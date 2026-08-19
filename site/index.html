@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>engzero — The AI engineering platform you graduate into</title>
+<meta name="description" content="engzero is a local-first trust layer for AI engineering: auditable change sets, durable memory, and a policy boundary the model cannot route around — wrapped around the coding agent you already run.">
+<meta name="theme-color" content="#0b0d11">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://engzero.dev/">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://engzero.dev/">
+<meta property="og:site_name" content="engzero">
+<meta property="og:title" content="engzero — The AI engineering platform you graduate into">
+<meta property="og:description" content="The agent writes the code. engzero makes it defensible. A local-first trust layer of auditable change sets, durable memory, and a policy boundary — wrapped around the agent you already run.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="engzero — The AI engineering platform you graduate into">
+<meta name="twitter:description" content="The agent writes the code. engzero makes it defensible.">
+
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="/">engzero</a>
+    <div class="nav-links">
+      <a href="#why" data-optional>Why</a>
+      <a href="#platform">Platform</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#faq" data-optional>FAQ</a>
+      <a class="nav-gh" href="https://github.com/pacificseabass/engzero">[ github ]</a>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+
+  <!-- ───────────────────────── hero ───────────────────────── -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="kicker">For when the prototype becomes the product</p>
+      <h1>The agent writes the code.<br><span class="accent">engzero makes it defensible.</span></h1>
+      <p class="lede">
+        A local-first trust layer for AI engineering — auditable change sets, durable
+        memory, and a policy boundary the model can&#39;t route around — wrapped around
+        the coding agent you already run.
+      </p>
+      <p class="hero-meta">Plain Markdown &middot; your machine &middot; open engine, private authority</p>
+      <!-- EMAIL NOT LIVE YET. When hello@engzero.dev exists, add back as a third action:
+           <a class="btn" href="mailto:hello@engzero.dev?subject=engzero%20early%20access">Get early access</a> -->
+      <div class="cta-row">
+        <a class="btn" href="https://github.com/pacificseabass/engzero">View the source</a>
+        <a class="btn btn--ghost" href="#why">Read the vision</a>
+      </div>
+      <p class="hero-status"><span class="pill">MVP 1 in active development — it is building itself</span></p>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── why ───────────────────────── -->
+  <section id="why">
+    <div class="wrap">
+      <p class="section-label">the moment you graduate</p>
+      <h2>You don&#39;t need this on day one.</h2>
+      <p class="lede">
+        Cursor, Copilot, Claude Code — the tools for AI-assisted coding are excellent,
+        and engzero doesn&#39;t replace them. It is for the moment your project stops
+        being a side project.
+      </p>
+
+      <ul class="moments">
+        <li>The prototype takes on real customers.</li>
+        <li>One repo becomes a frontend, a backend, and three internal tools.</li>
+        <li>A teammate asks &ldquo;why did we do it this way?&rdquo; and nobody remembers.</li>
+        <li>An auditor asks for a record of what changed &mdash; and there isn&#39;t one.</li>
+        <li>&ldquo;We vibe-coded it on Friday&rdquo; stops being a feature and starts being a liability.</li>
+      </ul>
+
+      <p class="aside">
+        That is when the ceremony starts paying for itself. Not before &mdash; and engzero will
+        keep telling you so.
+      </p>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── manifesto ───────────────────────── -->
+  <section class="manifesto">
+    <div class="wrap">
+      <p class="section-label">why we&#39;re building it</p>
+      <h2>AI coding has a trust problem, and more capability won&#39;t fix it.</h2>
+
+      <div class="letter">
+        <p>
+          The agents are good now. That&#39;s not the problem. The problem is what&#39;s left
+          behind after they work: merged diffs with no reasoning attached, sessions that
+          evaporate, production systems whose history lives in nobody&#39;s head.
+        </p>
+        <p>
+          Every generation of engineering tooling eventually had to answer the same
+          question: <em>can you show your work?</em> Version control answered it for code.
+          CI answered it for correctness. Nothing yet answers it for AI-made changes —
+          what was asked, what was tried, what was risky, what was verified.
+        </p>
+        <p>
+          We think the answer isn&#39;t a smarter agent. It&#39;s a <strong>trust layer</strong>:
+          change sets small enough to review, memory durable enough to outlive the session,
+          policy strong enough that the model can&#39;t hold your credentials even if it wanted
+          to — and all of it in plain Markdown on your own machine, because a record you
+          can&#39;t read and don&#39;t own isn&#39;t a record.
+        </p>
+        <p>
+          The first generation of AI coding tools optimized for the first hour: make the
+          demo great, make the trial great. That market is mature and well served. The next
+          generation will be judged on something harder — whether the tooling scales with the
+          project, the team, and the stakes. Whether it accumulates value or resets it every
+          session. Whether it earns trust as the systems it helps build become consequential.
+        </p>
+        <p>
+          We are building engzero for that test from the start. It wraps the agent you
+          already use. The engine is open source; authority over your systems stays yours.
+          Forking the code should never mean touching your production.
+        </p>
+        <p>
+          If your project is becoming a system people depend on, this is being built for you.
+        </p>
+        <p class="sig">— the engzero project</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── platform ───────────────────────── -->
+  <section id="platform">
+    <div class="wrap">
+      <p class="section-label">the platform</p>
+      <h2>Six primitives that make AI engineering defensible.</h2>
+      <p class="lede">
+        Not another coding agent — the trust layer around the one you already run.
+        Each primitive is labelled with where it actually is today.
+      </p>
+
+      <div class="grid">
+        <article class="card">
+          <span class="chip chip--built">shipping &middot; mvp 1</span>
+          <h3>Change sets</h3>
+          <p>
+            Every meaningful action is a small atomic unit with a goal, plan, risk level,
+            event log, validation record, and review summary. Branch per change set,
+            commit per coherent change, no untracked silent edits.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="chip chip--built">shipping &middot; mvp 1</span>
+          <h3>Project capsules</h3>
+          <p>
+            Hard isolation per project: memory namespace, workspace, secrets scope,
+            deploy permissions, audit log. Go from one project to seven without the
+            agent losing track of which one it&#39;s in.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="chip chip--wip">in progress &middot; mvp 1</span>
+          <h3>Four-tier memory ledger</h3>
+          <p>
+            Raw events → distilled lessons → proposed rules → active rules. The agent can
+            propose changes to its own behaviour, but nothing goes active without review.
+            Self-improvement you audit, not something that happens to you.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="chip chip--wip">in progress &middot; mvp 1</span>
+          <h3>MCP server</h3>
+          <p>
+            The same services the CLI wraps, exposed as tools over MCP. Your existing agent
+            (Claude Code first) drives the ledger from day one. No new coding tool to learn,
+            no agent to switch away from.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="chip chip--next">next &middot; mvp 2</span>
+          <h3>Policy boundary</h3>
+          <p>
+            Model → Policy → Tool Broker → Sandbox. The model never holds a shell, a cloud
+            credential, or a raw secret. Deny-by-default hook interception first, then
+            rootless Podman sandboxing to harden it.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="chip chip--vision">vision</span>
+          <h3>Capability packs</h3>
+          <p>
+            Versioned, auditable domain expertise that activates per change set and learns
+            from real work — so what the agent knows about your stack is a reviewable
+            artifact, not an opaque weight update.
+          </p>
+        </article>
+      </div>
+
+      <div class="legend">
+        <span><span class="chip chip--built">shipping</span> works today</span>
+        <span><span class="chip chip--wip">in progress</span> being built now</span>
+        <span><span class="chip chip--next">next</span> designed, not built</span>
+        <span><span class="chip chip--vision">vision</span> direction, not a promise</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── demo ───────────────────────── -->
+  <section id="see-it">
+    <div class="wrap">
+      <p class="section-label">see it work</p>
+      <h2>It&#39;s just Markdown. Grep it, read it, hand it to an auditor.</h2>
+      <p class="lede">
+        Real output from the current build — a change set opened, validated, and closed
+        against a homelab project, and the ledger note it leaves behind.
+      </p>
+
+      <div class="demo">
+        <div class="panel">
+          <div class="panel-bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="name">zsh — engzero</span>
+          </div>
+<pre><span class="cm"># one CLI, one MCP server, same services underneath</span>
+<span class="p">$</span> <span class="c">engzero project init homelab --risk medium</span>
+Created project: homelab
+Manifest note: 04-Projects/homelab/ProjectManifest.md
+
+<span class="p">$</span> <span class="c">engzero change-set create --project homelab \
+      --goal "Pin Jellyfin to 10.9" --risk medium</span>
+Created change set: <span class="key">cs_20260810_ijopji</span>
+Note: 02-Change-Sets/2026-08/
+      cs_20260810_ijopji - pin-jellyfin.md
+
+<span class="p">$</span> <span class="c">engzero change-set validation add cs_20260810_ijopji \
+      --kind manual --status passed \
+      --summary "Playback verified on two clients"</span>
+Updated change set: cs_20260810_ijopji (status: validating)
+
+<span class="p">$</span> <span class="c">engzero change-set close cs_20260810_ijopji \
+      --summary "Pinned to 10.9, playback verified."</span>
+Updated change set: cs_20260810_ijopji (status: <span class="ok">closed</span>)
+
+<span class="cm"># the ledger is just files, all the way down</span>
+<span class="p">$</span> <span class="c">ls 02-Change-Sets/2026-08/</span>
+cs_20260810_ijopji - pin-jellyfin.md</pre>
+        </div>
+
+        <div class="panel">
+          <div class="panel-bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="name">cs_20260810_ijopji - pin-jellyfin.md</span>
+          </div>
+<pre><span class="cm">---</span>
+<span class="hd">type:</span> change-set
+<span class="hd">status:</span> closed
+<span class="hd">project_id:</span> homelab
+<span class="hd">change_set_id:</span> cs_20260810_ijopji
+<span class="hd">risk_level:</span> medium
+<span class="cm">---</span>
+
+<span class="key"># Change Set: Pin Jellyfin</span>
+
+<span class="key">## Goal</span>
+Pin Jellyfin to 10.9
+
+<span class="key">## Plan</span>
+- Pin image tag to 10.9 in docker-compose.yml
+- Recreate container and confirm health
+
+<span class="key">## Events</span>
+- 21:51:04 [created] Change set created
+- 21:51:04 [plan_updated] Plan item added
+- 21:51:05 [status_changed] Status changed to executing
+- 21:51:05 [file_changed] jellyfin/docker-compose.yml
+- 21:51:07 [validation_recorded] <span class="ok">Validation passed</span>
+- 21:51:07 [closed] Pinned to 10.9, playback verified.
+
+<span class="key">## Validation</span>
+- <span class="ok">passed</span> manual — Playback verified on two clients
+
+<span class="key">## Review Summary</span>
+Pinned to 10.9, playback verified.</pre>
+        </div>
+      </div>
+
+      <p class="demo-note">
+        Six months from now, &ldquo;why is this code here?&rdquo; resolves to a document, not
+        a memory. Read it in Obsidian, <code>grep</code> it from a terminal, or diff it in
+        git. It is a file you own, in a format that outlives every tool that touched it.
+      </p>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── roadmap ───────────────────────── -->
+  <section id="roadmap">
+    <div class="wrap">
+      <p class="section-label">where this is going</p>
+      <h2>The build order, and what each stage unlocks.</h2>
+      <p class="lede">
+        The project is pre-launch. This is the actual sequence being worked, not a wishlist —
+        each stage has to be dogfooded on real projects before the next one starts.
+      </p>
+
+      <div class="roadmap">
+        <div class="stage">
+          <div class="stage-id">
+            <strong>MVP 1</strong>
+            <span class="chip chip--wip">in progress</span>
+          </div>
+          <div>
+            <h3>Trust layer</h3>
+            <p>
+              The durable spine: change-set ledger, project capsules, memory writers, the
+              CLI, and an MCP server over the same services so an existing agent drives it
+              from day one. Git-first discipline throughout.
+            </p>
+            <ul>
+              <li>Dogfood: engzero builds itself; a homelab is the first external project.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="stage">
+          <div class="stage-id">
+            <strong>MVP 2</strong>
+            <span class="chip chip--next">next</span>
+          </div>
+          <div>
+            <h3>Policy boundary hardening</h3>
+            <p>
+              Deny-by-default policy enforcement in the host harness&#39;s hook surface, then
+              rootless Podman sandboxed execution, command allowlists, and per-project
+              workspace isolation.
+            </p>
+          </div>
+        </div>
+
+        <div class="stage">
+          <div class="stage-id">
+            <strong>MVP 3</strong>
+            <span class="chip chip--next">designed</span>
+          </div>
+          <div>
+            <h3>Deployment tool</h3>
+            <p>
+              A credential-owning deploy tool exposed over MCP. The agent requests, the tool
+              executes, the model never sees the keys. GCP staging first, with deployment
+              memory and rollback notes recorded as change sets.
+            </p>
+          </div>
+        </div>
+
+        <div class="stage">
+          <div class="stage-id">
+            <strong>MVP 4</strong>
+            <span class="chip chip--vision">optional</span>
+          </div>
+          <div>
+            <h3>Native agent loop</h3>
+            <p>
+              Multi-model routing, planner/executor/critic, and multi-agent exploration —
+              entered only if the harness-level policy boundary proves too weak. A testable
+              question, not an assumption.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── open source ───────────────────────── -->
+  <section id="open">
+    <div class="wrap">
+      <p class="section-label">open engine, private authority</p>
+      <h2>Fork the engine. Keep the authority.</h2>
+
+      <p class="principle">
+        Knowing engzero&#39;s source code must never be sufficient to access, modify, or deploy
+        anyone&#39;s production systems.
+      </p>
+
+      <div class="split">
+        <div class="col col--open">
+          <h3>open engine</h3>
+          <ul>
+            <li>Runtime, change-set ledger, schemas</li>
+            <li>Policy interfaces &amp; capability packs</li>
+            <li>MCP server, CLI, note templates</li>
+            <li>Safe examples against toy targets</li>
+          </ul>
+        </div>
+        <div class="col col--private">
+          <h3>private authority — yours only</h3>
+          <ul>
+            <li>Credentials &amp; deployment profiles</li>
+            <li>Real project manifests &amp; vaults</li>
+            <li>Runbooks &amp; audit logs</li>
+            <li>Every binding to a real system</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="aside">
+        This is the security architecture a closed, hosted agent structurally cannot offer.
+        The code being public is what makes it reviewable; the authority staying private is
+        what makes it safe.
+      </p>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── faq ───────────────────────── -->
+  <section id="faq">
+    <div class="wrap">
+      <p class="section-label">is it for you?</p>
+      <h2>Straight answers, including the unflattering ones.</h2>
+
+      <div class="faq">
+        <details open>
+          <summary>Do I have to switch coding agents?</summary>
+          <p>
+            No — engzero is not a coding agent and does not want to be. It connects to the one
+            you already use — Claude Code first — over MCP. Your agent works normally;
+            engzero only records, classifies, and constrains.
+          </p>
+        </details>
+
+        <details class="honest">
+          <summary>Is this overkill for my side project?</summary>
+          <p>
+            Honestly — yes, probably. If you&#39;re hacking on a Saturday afternoon, Cursor
+            or Claude Code alone will serve you better, and we&#39;d rather tell you that than
+            sell you ceremony you don&#39;t need.
+          </p>
+          <p>
+            The ceremony starts paying for itself when you have long-lived projects, real users, real
+            secrets, and changes that have to be defensible months later.
+          </p>
+        </details>
+
+        <details class="honest">
+          <summary>Can I use it today?</summary>
+          <p>
+            Not yet. MVP 1 — the ledger, CLI, and MCP server — is in active development and
+            is being used to build itself. There&#39;s no release and no signup list; the way
+            in right now is to
+            <a href="https://github.com/pacificseabass/engzero">watch the repo</a>
+            and follow the build.
+          </p>
+        </details>
+
+        <details>
+          <summary>Where does my data go?</summary>
+          <p>
+            Nowhere. Everything is local-first: the ledger is plain Markdown on your machine,
+            machine state is a local store, and secrets never enter the model&#39;s context
+            at all — credentials live inside tools the model can invoke but never read.
+          </p>
+        </details>
+
+        <details>
+          <summary>What does &ldquo;auditable&rdquo; actually mean here?</summary>
+          <p>
+            Every meaningful change is a change set: goal, plan, risk level, event log,
+            files touched, validation results, git branch and final commit, rollback notes,
+            and a review summary. Not a chat transcript — a structured record with a schema.
+          </p>
+        </details>
+
+        <details>
+          <summary>Is it really open source? What&#39;s the catch?</summary>
+          <p>
+            The engine — runtime, schemas, policy interfaces, tooling — is open, and you
+            can read it right now at
+            <a href="https://github.com/pacificseabass/engzero">github.com/pacificseabass/engzero</a>.
+            Your operational layer — credentials, manifests, deploy profiles, audit logs —
+            stays private on your infrastructure. That split is the design, not a paywall.
+          </p>
+        </details>
+
+        <details>
+          <summary>Who is behind this?</summary>
+          <p>
+            An independent open-source project, currently built by one engineer in the open,
+            dogfooded against real systems. No funding announcement, no user-count claims,
+            no logos we haven&#39;t earned — when there&#39;s real proof to show, it&#39;ll
+            show up here.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── closing ───────────────────────── -->
+  <section class="closing">
+    <div class="wrap">
+      <h2>If your project is becoming a system people depend on.</h2>
+      <p class="lede">
+        Early access isn&#39;t open yet — there&#39;s nothing to install while MVP 1 is still
+        being built. But the work itself is public: the engine, the schemas, and the
+        change sets that built them.
+      </p>
+      <!-- EMAIL NOT LIVE YET. When hello@engzero.dev exists, add back alongside:
+           <a class="btn btn--ghost" href="mailto:hello@engzero.dev?subject=engzero%20early%20access">Get early access</a> -->
+      <div class="cta-row">
+        <a class="btn" href="https://github.com/pacificseabass/engzero">Follow the build on GitHub</a>
+      </div>
+      <p class="fine">Pre-launch. Watch the repo for updates — there&#39;s no list to join yet.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>engzero &middot; local-first trust layer for AI engineering</span>
+    <!-- EMAIL NOT LIVE YET. Restore alongside the GitHub link:
+         <a href="mailto:hello@engzero.dev">hello@engzero.dev</a> &nbsp;&middot;&nbsp; -->
+    <span>
+      <a href="https://github.com/pacificseabass/engzero">github</a>
+      &nbsp;&middot;&nbsp; engzero.dev
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
