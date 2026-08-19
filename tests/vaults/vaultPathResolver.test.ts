@@ -10,7 +10,7 @@ describe("resolveVaultPath", () => {
   const vault: VaultConfig = {
     id: "agent",
     label: "Agent Vault",
-    rootPath: "/tmp/3ng0-agent-vault",
+    rootPath: "/tmp/engzero-agent-vault",
     capabilities: ["read", "write", "append"],
   };
 
@@ -21,7 +21,7 @@ describe("resolveVaultPath", () => {
       vault,
       vaultId: "agent",
       relativePath: "Notes/example.md",
-      absolutePath: resolve("/tmp/3ng0-agent-vault", "Notes/example.md"),
+      absolutePath: resolve("/tmp/engzero-agent-vault", "Notes/example.md"),
     });
   });
 
@@ -30,7 +30,7 @@ describe("resolveVaultPath", () => {
 
     expect(resolved.relativePath).toBe("note.md");
     expect(resolved.absolutePath).toBe(
-      resolve("/tmp/3ng0-agent-vault", "note.md"),
+      resolve("/tmp/engzero-agent-vault", "note.md"),
     );
   });
 

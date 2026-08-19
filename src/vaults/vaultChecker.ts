@@ -86,11 +86,11 @@ export async function checkVault(vault: VaultConfig): Promise<VaultCheckResult> 
     }
   }
   if (vault.capabilities.includes('write') || vault.capabilities.includes('append')) {
-    const probePath = join(vault.rootPath, `3ng0-${process.pid}-${Date.now()}.tmp`)
+    const probePath = join(vault.rootPath, `engzero-${process.pid}-${Date.now()}.tmp`)
     let probeCreated = false;
 
     try {
-      await writeFile(probePath, '3ng0 vault check\n', { flag: 'wx' });
+      await writeFile(probePath, 'engzero vault check\n', { flag: 'wx' });
       probeCreated = true;
       checks.push({
         name: 'write_probe',

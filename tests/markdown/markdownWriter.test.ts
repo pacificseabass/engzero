@@ -107,7 +107,7 @@ describe("MarkdownWriter", () => {
 async function createVault(
   capabilities: VaultConfig["capabilities"],
 ): Promise<VaultConfig> {
-  const rootPath = await mkdtemp(join(tmpdir(), "3ng0-markdown-writer-"));
+  const rootPath = await mkdtemp(join(tmpdir(), "engzero-markdown-writer-"));
   tempDirs.push(rootPath);
 
   return {

@@ -29,7 +29,7 @@ async function runCli(): Promise<void> {
   const program = new Command();
 
   program
-    .name("3ng0")
+    .name("engzero")
     .description("Persistent AI engineering agent runtime")
     .version("0.1.0");
 

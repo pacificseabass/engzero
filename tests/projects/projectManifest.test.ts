@@ -123,9 +123,9 @@ describe("renderProjectManifestNote", () => {
       vaultNamespace: "agent",
       repos: [
         {
-          name: "3ng0",
-          path: "~/developer/3ng0",
-          remote: "git@github.com:3ng0/3ng0.git",
+          name: "engzero",
+          path: "~/developer/engzero",
+          remote: "git@github.com:engzero/engzero.git",
         },
       ],
       riskProfile: "high",
@@ -140,7 +140,7 @@ describe("renderProjectManifestNote", () => {
     expect(note).toContain("project_type: internal-platform");
     expect(note).toContain("# Project Manifest: Agent Runtime");
     expect(note).toContain(
-      "- 3ng0 (~/developer/3ng0, git@github.com:3ng0/3ng0.git)",
+      "- engzero (~/developer/engzero, git@github.com:engzero/engzero.git)",
     );
     expect(note).toContain("- local-dev (local, active)");
     expect(note).toContain("- future-cloud (gcp, planned)");
@@ -150,7 +150,7 @@ describe("renderProjectManifestNote", () => {
 });
 
 async function createVault(): Promise<VaultConfig> {
-  const rootPath = await mkdtemp(join(tmpdir(), "3ng0-project-manifest-"));
+  const rootPath = await mkdtemp(join(tmpdir(), "engzero-project-manifest-"));
   tempDirs.push(rootPath);
 
   return {

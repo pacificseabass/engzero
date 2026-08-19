@@ -41,7 +41,7 @@ type SetupPrompt = (question: string) => Promise<string>;
 export function addSetupSubcommand(program: Command): void {
   program
     .command("setup")
-    .description("Create an initial 3ng0 config file")
+    .description("Create an initial engzero config file")
     .option("--config <path>", "Config path to create")
     .option("--vault-path <path>", "Agent vault root path")
     .option("--state-path <path>", "JSON state store path")
@@ -167,7 +167,7 @@ type RenderSetupConfigInput = {
 export function renderSetupConfig(input: RenderSetupConfigInput): string {
   return [
     "agent:",
-    '  name: "3ng0"',
+    '  name: "engzero"',
     `  timezone: ${quoteYamlString(input.timezone)}`,
     "",
     "state:",
@@ -176,7 +176,7 @@ export function renderSetupConfig(input: RenderSetupConfigInput): string {
     "",
     "vaults:",
     '  - id: "agent"',
-    '    label: "3ng0 Agent Vault"',
+    '    label: "engzero Agent Vault"',
     `    root_path: ${quoteYamlString(input.vaultPath)}`,
     "    capabilities:",
     "      - read",

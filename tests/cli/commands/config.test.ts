@@ -6,17 +6,17 @@ import type { AgentRuntimeConfig } from "../../../src/config/configSchema.js";
 describe("formatConfig", () => {
   const config: AgentRuntimeConfig = {
     agent: {
-      name: "3ng0",
+      name: "engzero",
       timezone: "America/Los_Angeles",
     },
     state: {
       type: "json",
-      path: "/home/test/.local/share/3ng0/state.json",
+      path: "/home/test/.local/share/engzero/state.json",
     },
     vaults: [
       {
         id: "agent",
-        label: "3ng0 Agent Vault",
+        label: "engzero Agent Vault",
         rootPath: "/home/test/Obsidian/agent-vault",
         capabilities: ["read", "write", "append"],
       },
@@ -30,16 +30,16 @@ describe("formatConfig", () => {
     expect(formatConfig(config)).toBe(
       [
         "Agent",
-        "  name: 3ng0",
+        "  name: engzero",
         "  timezone: America/Los_Angeles",
         "",
         "State",
         "  type: json",
-        "  path: /home/test/.local/share/3ng0/state.json",
+        "  path: /home/test/.local/share/engzero/state.json",
         "",
         "Vaults",
         "  agent",
-        "    label: 3ng0 Agent Vault",
+        "    label: engzero Agent Vault",
         "    rootPath: /home/test/Obsidian/agent-vault",
         "    capabilities: read, write, append",
         "",

@@ -142,7 +142,7 @@ describe("JsonStateStore", () => {
 });
 
 async function createTempStatePath(relativePath = "state.json"): Promise<string> {
-  const dir = await mkdtemp(join(tmpdir(), "3ng0-state-store-"));
+  const dir = await mkdtemp(join(tmpdir(), "engzero-state-store-"));
   tempDirs.push(dir);
 
   return join(dir, relativePath);

@@ -103,7 +103,7 @@ describe("runProjectInit", () => {
   });
 
   it("registers the project in state and writes its manifest note", async () => {
-    const rootPath = await mkdtemp(join(tmpdir(), "3ng0-project-init-"));
+    const rootPath = await mkdtemp(join(tmpdir(), "engzero-project-init-"));
     tempDirs.push(rootPath);
     const stateStore = new InMemoryStateStore();
     const vaultRegistry = new VaultRegistry([

@@ -35,7 +35,7 @@ type Fixture = {
 async function createFixture(
   capabilities: VaultConfig["capabilities"] = ["read", "write", "append"],
 ): Promise<Fixture> {
-  const rootPath = await mkdtemp(join(tmpdir(), "3ng0-change-set-"));
+  const rootPath = await mkdtemp(join(tmpdir(), "engzero-change-set-"));
   tempDirs.push(rootPath);
 
   const vault: VaultConfig = {

@@ -88,7 +88,7 @@ describe("checkVault", () => {
 
     expect(result.status).toBe("ok");
     expect(checkStatus(result.checks, "write_probe")).toBe("ok");
-    expect(entries.filter((entry) => entry.startsWith("3ng0-"))).toEqual([]);
+    expect(entries.filter((entry) => entry.startsWith("engzero-"))).toEqual([]);
   });
 });
 
@@ -116,7 +116,7 @@ describe("checkVaults", () => {
 });
 
 async function createTempDir(): Promise<string> {
-  const dir = await mkdtemp(join(tmpdir(), "3ng0-vault-checker-"));
+  const dir = await mkdtemp(join(tmpdir(), "engzero-vault-checker-"));
   tempDirs.push(dir);
   await mkdir(dir, { recursive: true });
 

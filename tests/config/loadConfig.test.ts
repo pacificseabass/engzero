@@ -26,14 +26,14 @@ describe("loadConfig", () => {
       configPath,
       [
         "agent:",
-        '  name: "3ng0"',
+        '  name: "engzero"',
         '  timezone: "America/Los_Angeles"',
         "state:",
         '  type: "json"',
-        '  path: "~/.local/share/3ng0/state.json"',
+        '  path: "~/.local/share/engzero/state.json"',
         "vaults:",
         '  - id: "agent"',
-        '    label: "3ng0 Agent Vault"',
+        '    label: "engzero Agent Vault"',
         '    root_path: "~/Obsidian/agent-vault"',
         "    capabilities:",
         "      - read",
@@ -48,17 +48,17 @@ describe("loadConfig", () => {
 
     await expect(loadConfig({ path: configPath, homeDir })).resolves.toEqual({
       agent: {
-        name: "3ng0",
+        name: "engzero",
         timezone: "America/Los_Angeles",
       },
       state: {
         type: "json",
-        path: join(homeDir, ".local", "share", "3ng0", "state.json"),
+        path: join(homeDir, ".local", "share", "engzero", "state.json"),
       },
       vaults: [
         {
           id: "agent",
-          label: "3ng0 Agent Vault",
+          label: "engzero Agent Vault",
           rootPath: join(homeDir, "Obsidian", "agent-vault"),
           capabilities: ["read", "write", "append"],
         },
@@ -69,7 +69,7 @@ describe("loadConfig", () => {
     });
   });
 
-  it("uses THREENGO_CONFIG when no explicit path is provided", async () => {
+  it("uses ENGZERO_CONFIG when no explicit path is provided", async () => {
     const homeDir = await createTempDir();
     const configPath = join(homeDir, "custom.yaml");
 
@@ -82,15 +82,15 @@ describe("loadConfig", () => {
       homeDir,
     });
 
-    expect(config.agent.name).toBe("3ng0");
+    expect(config.agent.name).toBe("engzero");
     expect(config.state.path).toBe(
-      join(homeDir, ".local", "share", "3ng0", "state.json"),
+      join(homeDir, ".local", "share", "engzero", "state.json"),
     );
   });
 
   it("uses the default config path when no path or env override is provided", async () => {
     const homeDir = await createTempDir();
-    const defaultConfigPath = join(homeDir, ".config", "3ng0", "config.yaml");
+    const defaultConfigPath = join(homeDir, ".config", "engzero", "config.yaml");
 
     await mkdir(dirname(defaultConfigPath), { recursive: true });
     await writeFile(defaultConfigPath, "vaults: []\n", "utf8");
@@ -161,7 +161,7 @@ describe("loadConfig", () => {
 });
 
 async function createTempDir(): Promise<string> {
-  const dir = await mkdtemp(join(tmpdir(), "3ng0-config-"));
+  const dir = await mkdtemp(join(tmpdir(), "engzero-config-"));
   tempDirs.push(dir);
 
   return dir;

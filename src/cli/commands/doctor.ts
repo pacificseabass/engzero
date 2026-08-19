@@ -11,7 +11,7 @@ export function addDoctorSubcommand(program: Command) {
       } catch (error) {
         if (error instanceof ConfigError) {
           if (error.code === 'file-does-not-exist') {
-            console.error('Config file not found. Run "3ng0 setup" to create one.');
+            console.error('Config file not found. Run "engzero setup" to create one.');
             return;
           }
           throw error;

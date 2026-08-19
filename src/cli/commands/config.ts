@@ -10,7 +10,7 @@ type ConfigShowOptions = {
 export function addConfigSubcommand(program: Command): void {
   const config = program
     .command("config")
-    .description("Inspect 3ng0 configuration");
+    .description("Inspect engzero configuration");
 
   config
     .command("show")

@@ -25,23 +25,23 @@ describe("renderSetupConfig", () => {
     expect(
       renderSetupConfig({
         vaultPath: "~/vault",
-        statePath: "~/.local/share/3ng0/state.json",
+        statePath: "~/.local/share/engzero/state.json",
         defaultProjectId: "agent-runtime",
         timezone: "America/Los_Angeles",
       }),
     ).toBe(
       [
         "agent:",
-        '  name: "3ng0"',
+        '  name: "engzero"',
         '  timezone: "America/Los_Angeles"',
         "",
         "state:",
         '  type: "json"',
-        '  path: "~/.local/share/3ng0/state.json"',
+        '  path: "~/.local/share/engzero/state.json"',
         "",
         "vaults:",
         '  - id: "agent"',
-        '    label: "3ng0 Agent Vault"',
+        '    label: "engzero Agent Vault"',
         '    root_path: "~/vault"',
         "    capabilities:",
         "      - read",
@@ -66,7 +66,7 @@ describe("createSetupConfig", () => {
     });
 
     expect(result).toEqual({
-      configPath: join(homeDir, ".config", "3ng0", "config.yaml"),
+      configPath: join(homeDir, ".config", "engzero", "config.yaml"),
       created: true,
     });
 
@@ -82,7 +82,7 @@ describe("createSetupConfig", () => {
     const result = await createSetupConfig({
       configPath,
       homeDir,
-      vaultPath: "~/obsidian/3ng0",
+      vaultPath: "~/obsidian/engzero",
       statePath: "~/state.json",
       defaultProjectId: "demo",
       timezone: "UTC",
@@ -91,7 +91,7 @@ describe("createSetupConfig", () => {
     const config = await readFile(result.configPath, "utf8");
 
     expect(result.configPath).toBe(configPath);
-    expect(config).toContain('    root_path: "~/obsidian/3ng0"');
+    expect(config).toContain('    root_path: "~/obsidian/engzero"');
     expect(config).toContain('  path: "~/state.json"');
     expect(config).toContain('  default_project_id: "demo"');
   });
@@ -182,9 +182,9 @@ describe("promptForMissingSetupOptions", () => {
     );
 
     expect(options).toMatchObject({
-      configPath: join(homeDir, ".config", "3ng0", "config.yaml"),
+      configPath: join(homeDir, ".config", "engzero", "config.yaml"),
       vaultPath: "~/Obsidian/agent-vault",
-      statePath: "~/.local/share/3ng0/state.json",
+      statePath: "~/.local/share/engzero/state.json",
       defaultProjectId: "agent-runtime",
       homeDir,
     });
@@ -216,7 +216,7 @@ describe("promptForMissingSetupOptions", () => {
 });
 
 async function createTempDir(): Promise<string> {
-  const dir = await mkdtemp(join(tmpdir(), "3ng0-setup-"));
+  const dir = await mkdtemp(join(tmpdir(), "engzero-setup-"));
   tempDirs.push(dir);
 
   return dir;

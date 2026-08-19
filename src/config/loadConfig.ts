@@ -90,7 +90,7 @@ export function normalizeConfig(
 
 function normalizeAgent(raw: RawAgentRuntimeConfig): AgentRuntimeConfig["agent"] {
   return {
-    name: readOptionalString(raw.agent?.name, "agent.name") ?? "3ng0",
+    name: readOptionalString(raw.agent?.name, "agent.name") ?? "engzero",
     timezone:
       readOptionalString(raw.agent?.timezone, "agent.timezone") ??
       Intl.DateTimeFormat().resolvedOptions().timeZone,
