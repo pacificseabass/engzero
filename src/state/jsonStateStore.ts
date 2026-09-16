@@ -1,4 +1,5 @@
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import { mkdir, open, readFile, rename, unlink } from "node:fs/promises";
 import { dirname } from "node:path";
 
 import { formatError, StateStoreError } from "../util/errors.js";
@@ -44,19 +45,32 @@ export class JsonStateStore implements StateStore {
     assertSupportedState(state, this.path);
 
     const stateDir = dirname(this.path);
-    const tempPath = `${this.path}.tmp-${process.pid}-${Date.now()}`;
+    const tempPath = `${this.path}.tmp-${randomUUID()}`;
     const serialized = `${JSON.stringify(state, null, 2)}\n`;
+    let tempCreated = false;
 
     try {
-      await mkdir(stateDir, { recursive: true });
-      await writeFile(tempPath, serialized, "utf8");
+      await mkdir(stateDir, { recursive: true, mode: 0o700 });
+      const file = await open(tempPath, "wx", 0o600);
+      tempCreated = true;
+      try {
+        await file.writeFile(serialized, "utf8");
+      } finally {
+        await file.close();
+      }
       await rename(tempPath, this.path);
+      tempCreated = false;
     } catch (error) {
       throw new StateStoreError(
         `Failed to write state store at ${this.path}: ${formatError(error)}`,
         "state-write-failed",
         { cause: error },
       );
+    } finally {
+      if (tempCreated) {
+        // Preserve the original write error if cleanup also fails.
+        await unlink(tempPath).catch(() => undefined);
+      }
     }
   }
 

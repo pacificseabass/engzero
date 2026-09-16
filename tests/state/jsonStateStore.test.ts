@@ -1,10 +1,20 @@
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import {
+  chmod,
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  rm,
+  stat,
+  writeFile,
+} from "node:fs/promises";
+import { dirname, join } from "node:path";
 import { tmpdir } from "node:os";
 
 import { afterEach, describe, expect, it } from "vitest";
 
 import { JsonStateStore } from "../../src/state/jsonStateStore.js";
+import { createEmptyState } from "../../src/state/stateTypes.js";
 import { StateStoreError } from "../../src/util/errors.js";
 
 const tempDirs: string[] = [];
@@ -54,6 +64,42 @@ describe("JsonStateStore", () => {
     const reloaded = await store.load();
 
     expect(reloaded.projects["agent-runtime"]?.name).toBe("Agent Runtime");
+  });
+
+  it.skipIf(process.platform === "win32")("creates private state and directories even with a permissive umask", async () => {
+    const statePath = await createTempStatePath("private/nested/state.json");
+    const previousUmask = process.umask(0);
+    try {
+      await new JsonStateStore(statePath).save(createEmptyState());
+      expect((await stat(statePath)).mode & 0o777).toBe(0o600);
+      expect((await stat(dirname(statePath))).mode & 0o777).toBe(0o700);
+      expect((await stat(dirname(dirname(statePath)))).mode & 0o777).toBe(0o700);
+    } finally {
+      process.umask(previousUmask);
+    }
+  });
+
+  it.skipIf(process.platform === "win32")("repairs state permissions without changing an existing parent directory", async () => {
+    const statePath = await createTempStatePath("shared/state.json");
+    await mkdir(dirname(statePath));
+    await chmod(dirname(statePath), 0o755);
+    await writeFile(statePath, JSON.stringify(createEmptyState()));
+    await chmod(statePath, 0o644);
+
+    await new JsonStateStore(statePath).save(createEmptyState());
+
+    expect((await stat(statePath)).mode & 0o777).toBe(0o600);
+    expect((await stat(dirname(statePath))).mode & 0o777).toBe(0o755);
+    await expect(readdir(dirname(statePath))).resolves.toEqual(["state.json"]);
+  });
+
+  it("cleans up a temporary state file after a failed replacement", async () => {
+    const statePath = await createTempStatePath();
+    await mkdir(statePath);
+
+    await expect(new JsonStateStore(statePath).save(createEmptyState())).rejects.toThrow(StateStoreError);
+
+    await expect(readdir(dirname(statePath))).resolves.toEqual(["state.json"]);
   });
 
   it("runs a transaction by loading, mutating, and saving state", async () => {

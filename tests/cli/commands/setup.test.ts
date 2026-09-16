@@ -1,5 +1,14 @@
-import { mkdtemp, readFile, rm } from "node:fs/promises";
-import { join } from "node:path";
+import {
+  chmod,
+  link,
+  mkdtemp,
+  readFile,
+  rm,
+  stat,
+  symlink,
+  writeFile,
+} from "node:fs/promises";
+import { dirname, join } from "node:path";
 import { tmpdir } from "node:os";
 
 import { afterEach, describe, expect, it } from "vitest";
@@ -73,6 +82,49 @@ describe("createSetupConfig", () => {
     await expect(readFile(result.configPath, "utf8")).resolves.toContain(
       '  timezone: "America/Los_Angeles"',
     );
+  });
+
+  it.skipIf(process.platform === "win32")("creates private config files and directories with a permissive umask", async () => {
+    const homeDir = await createTempDir();
+    const previousUmask = process.umask(0);
+    try {
+      const result = await createSetupConfig({ homeDir, timezone: "UTC" });
+
+      expect((await stat(result.configPath)).mode & 0o777).toBe(0o600);
+      expect((await stat(dirname(result.configPath))).mode & 0o777).toBe(0o700);
+    } finally {
+      process.umask(previousUmask);
+    }
+  });
+
+  it.skipIf(process.platform === "win32")("repairs permissions when replacing an existing config", async () => {
+    const homeDir = await createTempDir();
+    const configPath = join(homeDir, "config.yaml");
+    await writeFile(configPath, "old configuration\n");
+    await chmod(configPath, 0o644);
+
+    await createSetupConfig({ configPath, homeDir, timezone: "UTC", force: true });
+
+    expect((await stat(configPath)).mode & 0o777).toBe(0o600);
+    await expect(readFile(configPath, "utf8")).resolves.toContain('timezone: "UTC"');
+  });
+
+  it.each(["symlink", "hardlink"])("refuses to overwrite a config %s target", async (kind) => {
+    const homeDir = await createTempDir();
+    const target = join(homeDir, "target.txt");
+    const configPath = join(homeDir, "config.yaml");
+    await writeFile(target, "original\n");
+    if (kind === "symlink") {
+      await symlink(target, configPath, "file");
+    } else {
+      await link(target, configPath);
+    }
+
+    await expect(createSetupConfig({
+      configPath, homeDir, timezone: "UTC", force: true,
+    })).rejects.toThrow(ConfigError);
+
+    await expect(readFile(target, "utf8")).resolves.toBe("original\n");
   });
 
   it("creates a config at an explicit path", async () => {

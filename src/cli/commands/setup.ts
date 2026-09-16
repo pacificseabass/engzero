@@ -1,4 +1,5 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { constants } from "node:fs";
+import { lstat, mkdir, open } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
 import { createInterface } from "node:readline/promises";
@@ -130,11 +131,39 @@ export async function createSetupConfig(
   });
 
   try {
-    await mkdir(dirname(configPath), { recursive: true });
-    await writeFile(configPath, contents, {
-      encoding: "utf8",
-      flag: options.force ? "w" : "wx",
-    });
+    await mkdir(dirname(configPath), { recursive: true, mode: 0o700 });
+    if (options.force) {
+      try {
+        if ((await lstat(configPath)).isSymbolicLink()) {
+          throw new Error("Config must not be a symlink");
+        }
+      } catch (error) {
+        if (!isNodeError(error) || error.code !== "ENOENT") {
+          throw error;
+        }
+      }
+    }
+    const file = await open(
+      configPath,
+      constants.O_WRONLY |
+        constants.O_CREAT |
+        (constants.O_NOFOLLOW ?? 0) |
+        (constants.O_NONBLOCK ?? 0) |
+        (options.force ? 0 : constants.O_EXCL),
+      0o600,
+    );
+    try {
+      const entry = await file.stat();
+      if (!entry.isFile() || entry.nlink !== 1) {
+        throw new Error("Config must be a regular file without hard links");
+      }
+      // Also repair permissions on an existing config before replacing content.
+      await file.chmod(0o600);
+      await file.truncate(0);
+      await file.writeFile(contents, "utf8");
+    } finally {
+      await file.close();
+    }
   } catch (error) {
     if (isNodeError(error) && error.code === "EEXIST") {
       throw new ConfigError(
@@ -208,6 +237,5 @@ function toHomeRelative(path: string, homeDir: string): string {
 function quoteYamlString(value: string): string {
   return JSON.stringify(value);
 }
-
 
 
