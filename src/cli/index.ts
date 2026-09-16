@@ -31,7 +31,7 @@ async function runCli(): Promise<void> {
   program
     .name("engzero")
     .description("Persistent AI engineering agent runtime")
-    .version("0.1.0");
+    .version("0.1.1");
 
   addVaultSubcommand(program);
   addDoctorSubcommand(program);
