@@ -6,8 +6,15 @@
   "bin": {
     "engzero": "./dist/cli/index.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "node scripts/build.mjs",
+    "prepack": "npm run build",
     "test": "vitest run",
     "dev": "tsx src/cli/index.ts",
     "site:dev": "python3 -m http.server 4173 --directory site"

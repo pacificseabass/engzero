@@ -19,3 +19,9 @@ On POSIX systems, state and setup config files are written with owner-only
 permissions (`0600`), and newly created parent directories use `0700`. Saving
 state or forcing config setup also replaces older file permissions. Existing
 parent directories retain their permissions, including custom shared locations.
+
+`pnpm build` recreates the generated `dist` directory. Packing or publishing also
+runs this clean build through `prepack`. The npm archive includes only `dist`,
+the package manifest, README, licence, and notice; local settings, source, tests,
+and the website are excluded. Inspect the archive with `npm pack --dry-run`
+before publishing a new version.
