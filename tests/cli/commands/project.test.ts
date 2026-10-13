@@ -1,19 +1,11 @@
-import { mkdtemp, readFile, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-
-import { afterEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import {
   formatProject,
   formatProjectInit,
   formatProjectList,
-  runProjectInit,
 } from "../../../src/cli/commands/project.js";
-import { renderProjectManifestNote } from "../../../src/projects/projectManifest.js";
 import type { ProjectManifest } from "../../../src/projects/projectTypes.js";
-import { VaultRegistry } from "../../../src/vaults/vaultRegistry.js";
-import { InMemoryStateStore } from "../../helpers/inMemoryStateStore.js";
 
 describe("project command formatters", () => {
   const project: ProjectManifest = {
@@ -88,52 +80,6 @@ describe("project command formatters", () => {
   it("formats a project as JSON", () => {
     expect(formatProject(project, { json: true })).toBe(
       JSON.stringify(project, null, 2),
-    );
-  });
-});
-
-describe("runProjectInit", () => {
-  const tempDirs: string[] = [];
-
-  afterEach(async () => {
-    await Promise.all(
-      tempDirs.map((path) => rm(path, { recursive: true, force: true })),
-    );
-    tempDirs.length = 0;
-  });
-
-  it("registers the project in state and writes its manifest note", async () => {
-    const rootPath = await mkdtemp(join(tmpdir(), "engzero-project-init-"));
-    tempDirs.push(rootPath);
-    const stateStore = new InMemoryStateStore();
-    const vaultRegistry = new VaultRegistry([
-      {
-        id: "agent",
-        label: "Agent Vault",
-        rootPath,
-        capabilities: ["read", "write", "append"],
-      },
-    ]);
-
-    const { project, note } = await runProjectInit(stateStore, vaultRegistry, {
-      projectId: "agent-runtime",
-      riskProfile: "high",
-    });
-
-    const state = await stateStore.load();
-    expect(state.projects["agent-runtime"]).toEqual(project);
-    expect(note).toEqual({
-      vaultId: "agent",
-      relativePath: "04-Projects/agent-runtime/ProjectManifest.md",
-      absolutePath: join(
-        rootPath,
-        "04-Projects",
-        "agent-runtime",
-        "ProjectManifest.md",
-      ),
-    });
-    await expect(readFile(note.absolutePath, "utf8")).resolves.toBe(
-      renderProjectManifestNote(project),
     );
   });
 });

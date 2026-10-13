@@ -1,8 +1,8 @@
 import { type Command } from "commander";
 
 import { loadConfig } from "../../config/loadConfig.js";
+import { loadRuntime } from "../../runtime/createRuntime.js";
 import { checkVaults } from "../../vaults/vaultChecker.js";
-import { VaultRegistry } from "../../vaults/vaultRegistry.js";
 
 export function addVaultSubcommand(program: Command): void {
   const vault = program
@@ -13,10 +13,9 @@ export function addVaultSubcommand(program: Command): void {
     .command("list")
     .description("List configured vaults")
     .action(async () => {
-      const config = await loadConfig();
-      const registry = new VaultRegistry(config.vaults);
+      const { vaults } = await loadRuntime();
 
-      for (const vault of registry.list()) {
+      for (const vault of vaults.list()) {
         console.log(
           [
             vault.id,

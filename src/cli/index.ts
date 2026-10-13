@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+import { createRequire } from "node:module";
+
 import { Command } from "commander";
 
 import { addVaultSubcommand } from "./commands/vault.js";
@@ -9,6 +11,11 @@ import { addConfigSubcommand } from "./commands/config.js";
 import { addProjectSubcommand } from "./commands/project.js";
 import { addChangeSetSubcommand } from "./commands/changeSet.js";
 import { formatError, RuntimeError } from "../util/errors.js";
+
+// Resolves from both src/cli (tsx) and dist/cli (built output).
+const { version } = createRequire(import.meta.url)("../../package.json") as {
+  version: string;
+};
 
 function handleCliError(error: unknown): void {
   process.exitCode = 1;
@@ -31,7 +38,7 @@ async function runCli(): Promise<void> {
   program
     .name("engzero")
     .description("Persistent AI engineering agent runtime")
-    .version("0.1.1");
+    .version(version);
 
   addVaultSubcommand(program);
   addDoctorSubcommand(program);

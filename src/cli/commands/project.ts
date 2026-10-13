@@ -1,18 +1,12 @@
 import { type Command } from "commander";
 
-import { loadConfig } from "../../config/loadConfig.js";
 import type { WriteNoteResult } from "../../markdown/markdownWriter.js";
-import { createProjectManifest } from "../../projects/projectManifest.js";
-import { ProjectService } from "../../projects/projectService.js";
 import type {
-  InitProjectInput,
   ProjectManifest,
   RiskProfile,
 } from "../../projects/projectTypes.js";
-import { JsonStateStore } from "../../state/jsonStateStore.js";
-import type { StateStore } from "../../state/stateStore.js";
+import { loadRuntime } from "../../runtime/createRuntime.js";
 import { ProjectNotFoundError, RuntimeError } from "../../util/errors.js";
-import { VaultRegistry } from "../../vaults/vaultRegistry.js";
 
 type ProjectInitOptions = {
   name?: string;
@@ -46,8 +40,8 @@ export function addProjectSubcommand(program: Command): void {
     .option("--risk <risk>", "Risk profile: low, medium, or high")
     .option("--json", "Print created project as JSON")
     .action(async (projectId: string, options: ProjectInitOptions) => {
-      const { stateStore, vaultRegistry } = await createRuntime();
-      const { project, note } = await runProjectInit(stateStore, vaultRegistry, {
+      const runtime = await loadRuntime();
+      const { project, note } = await runtime.projects.init({
         projectId,
         name: options.name,
         projectType: options.type,
@@ -64,8 +58,8 @@ export function addProjectSubcommand(program: Command): void {
     .description("List registered projects")
     .option("--json", "Print projects as JSON")
     .action(async (options: ProjectListOptions) => {
-      const service = await createProjectService();
-      const projects = await service.list();
+      const runtime = await loadRuntime();
+      const projects = await runtime.projects.list();
 
       console.log(formatProjectList(projects, options));
     });
@@ -75,8 +69,8 @@ export function addProjectSubcommand(program: Command): void {
     .description("Show a registered project")
     .option("--json", "Print project as JSON")
     .action(async (projectId: string, options: ProjectShowOptions) => {
-      const service = await createProjectService();
-      const project = await service.get(projectId);
+      const runtime = await loadRuntime();
+      const project = await runtime.projects.get(projectId);
 
       if (project === null) {
         throw new ProjectNotFoundError(`Project not found: ${projectId}`);
@@ -84,40 +78,6 @@ export function addProjectSubcommand(program: Command): void {
 
       console.log(formatProject(project, options));
     });
-}
-
-export async function runProjectInit(
-  stateStore: StateStore,
-  vaultRegistry: VaultRegistry,
-  input: InitProjectInput,
-): Promise<{ project: ProjectManifest; note: WriteNoteResult }> {
-  const service = new ProjectService(stateStore, vaultRegistry);
-  const project = await service.init(input);
-  const note = await createProjectManifest(
-    stateStore,
-    vaultRegistry,
-    project.projectId,
-  );
-
-  return { project, note };
-}
-
-async function createRuntime(): Promise<{
-  stateStore: StateStore;
-  vaultRegistry: VaultRegistry;
-}> {
-  const config = await loadConfig();
-
-  return {
-    stateStore: new JsonStateStore(config.state.path),
-    vaultRegistry: new VaultRegistry(config.vaults),
-  };
-}
-
-async function createProjectService(): Promise<ProjectService> {
-  const { stateStore, vaultRegistry } = await createRuntime();
-
-  return new ProjectService(stateStore, vaultRegistry);
 }
 
 function parseRiskProfile(value: string | undefined): RiskProfile | undefined {

@@ -80,6 +80,12 @@ A few conventions worth matching:
   leaking into `src/changeSets`, `src/projects`, or `src/memory`.
 - Keep the naming split straight: **engzero** is the project, `3ng0`-style names belong to
   a user's own agent instance. A fresh install must never be named after someone else's.
+- **Build services through the runtime.** `loadRuntime()` in `src/runtime/createRuntime.ts`
+  loads config and assembles the services; `createRuntime(config)` does the same from an
+  already normalized config. Construction never writes files or prints output. Use
+  `runtime.projects.init()` for project creation: it registers the project and writes its
+  manifest note. Registration is persisted first, so a failed note write leaves the project
+  registered without a note. That partial-failure behavior is known and intentional for now.
 
 ## Reporting a security issue
 

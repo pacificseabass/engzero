@@ -1,9 +1,6 @@
 import { type Command } from "commander";
 
-import {
-  ChangeSetService,
-  type ChangeSetFilter,
-} from "../../changeSets/changeSetService.js";
+import type { ChangeSetFilter } from "../../changeSets/changeSetService.js";
 import type {
   ChangeSet,
   ChangeSetEvent,
@@ -11,10 +8,8 @@ import type {
   RiskLevel,
   ValidationRecord,
 } from "../../changeSets/changeSetTypes.js";
-import { loadConfig } from "../../config/loadConfig.js";
-import { JsonStateStore } from "../../state/jsonStateStore.js";
+import { loadRuntime } from "../../runtime/createRuntime.js";
 import { ChangeSetNotFoundError, RuntimeError } from "../../util/errors.js";
-import { VaultRegistry } from "../../vaults/vaultRegistry.js";
 
 const STATUSES: ChangeSetStatus[] = [
   "created",
@@ -87,7 +82,7 @@ export function addChangeSetSubcommand(program: Command): void {
         source: string;
         json?: boolean;
       }) => {
-        const service = await createChangeSetService();
+        const { changeSets: service } = await loadRuntime();
         const created = await service.create({
           projectId: options.project,
           goal: options.goal,
@@ -122,7 +117,7 @@ export function addChangeSetSubcommand(program: Command): void {
               ? undefined
               : parseChoice(options.status, STATUSES, "status"),
         };
-        const service = await createChangeSetService();
+        const { changeSets: service } = await loadRuntime();
 
         console.log(formatChangeSetList(await service.list(filter), options));
       },
@@ -133,7 +128,7 @@ export function addChangeSetSubcommand(program: Command): void {
     .description("Show a change set")
     .option("--json", "Print change set as JSON")
     .action(async (id: string, options: JsonOption) => {
-      const service = await createChangeSetService();
+      const { changeSets: service } = await loadRuntime();
       const found = await service.get(id);
 
       if (found === null) {
@@ -148,7 +143,7 @@ export function addChangeSetSubcommand(program: Command): void {
     .description("Move a change set to a new status")
     .option("--json", "Print updated change set as JSON")
     .action(async (id: string, status: string, options: JsonOption) => {
-      const service = await createChangeSetService();
+      const { changeSets: service } = await loadRuntime();
       const updated = await service.setStatus(
         id,
         parseChoice(status, STATUSES, "status"),
@@ -168,7 +163,7 @@ export function addChangeSetSubcommand(program: Command): void {
         id: string,
         options: { message: string; type: string; json?: boolean },
       ) => {
-        const service = await createChangeSetService();
+        const { changeSets: service } = await loadRuntime();
         const updated = await service.appendEvent(id, {
           type: parseChoice(options.type, EVENT_TYPES, "event type"),
           message: options.message,
@@ -185,7 +180,7 @@ export function addChangeSetSubcommand(program: Command): void {
     .requiredOption("--item <item>", "Plan item")
     .option("--json", "Print updated change set as JSON")
     .action(async (id: string, options: { item: string; json?: boolean }) => {
-      const service = await createChangeSetService();
+      const { changeSets: service } = await loadRuntime();
 
       console.log(
         formatChangeSetUpdate(
@@ -202,7 +197,7 @@ export function addChangeSetSubcommand(program: Command): void {
     .requiredOption("--path <path>", "File path")
     .option("--json", "Print updated change set as JSON")
     .action(async (id: string, options: { path: string; json?: boolean }) => {
-      const service = await createChangeSetService();
+      const { changeSets: service } = await loadRuntime();
 
       console.log(
         formatChangeSetUpdate(
@@ -234,7 +229,7 @@ export function addChangeSetSubcommand(program: Command): void {
           json?: boolean;
         },
       ) => {
-        const service = await createChangeSetService();
+        const { changeSets: service } = await loadRuntime();
         const updated = await service.addValidation(id, {
           kind: parseChoice(options.kind, VALIDATION_KINDS, "validation kind"),
           status: parseChoice(
@@ -256,21 +251,12 @@ export function addChangeSetSubcommand(program: Command): void {
     .requiredOption("--summary <summary>", "Review summary")
     .option("--json", "Print closed change set as JSON")
     .action(async (id: string, options: { summary: string; json?: boolean }) => {
-      const service = await createChangeSetService();
+      const { changeSets: service } = await loadRuntime();
 
       console.log(
         formatChangeSetUpdate(await service.close(id, options.summary), options),
       );
     });
-}
-
-async function createChangeSetService(): Promise<ChangeSetService> {
-  const config = await loadConfig();
-
-  return new ChangeSetService(
-    new JsonStateStore(config.state.path),
-    new VaultRegistry(config.vaults),
-  );
 }
 
 function parseChoice<T extends string>(
